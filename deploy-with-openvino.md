@@ -23,7 +23,7 @@ authors:
 - user: echarlaix
 ---
 
-# Optimize and deploy 🤗 Transformer models with Optimum-Intel and OpenVINO GenAI
+# Optimize and deploy HuggingFace (🤗) Transformer models with Optimum-Intel and OpenVINO GenAI
 
 When it comes to the edge or client deployment of the Transformers models, Python is not always the most preferrable solution for this purpose. Many applications, especially in Windows, are written in C++ and require model inference API to be also in C++. Another aspect of such deployment is the application footprint, which also should be minimized to simplify software installation and update processes. [OpenVINO&trade; Toolkit](https://docs.openvino.ai/) initially emerged as a C++ AI inference solution that has bindings to popular programming languages such as Python or Java. It continues to be popular for edge and client deployment with the minimum dependencies on 3rd party software libraries.
 
@@ -37,24 +37,26 @@ In this blog post, we will outline the LLM deployment steps that include model e
 
 Python and C++ environments are required to run the examples below.
 
-To install packages into the Python environment use:
+To install packages into the Python environment, use the following pip command:
 ```sh
 pip install --upgrade --upgrade-strategy eager "optimum[openvino]"
 ```
 
-The following Python packages were used to reproduce the results that are claimed in this blogpost:
-- transformers==4.44
-- openvino==24.3
-- openvino-tokenizers==24.3
-- optimum-intel==1.20
-- lm-eval==0.4.3
+The following Python packages were used to reproduce the results that are presented in this blog post:
+```
+transformers==4.44
+openvino==24.3
+openvino-tokenizers==24.3
+optimum-intel==1.20
+lm-eval==0.4.3
+```
 
 For GenAI C++ libraries installation follow the instruction [here](https://docs.openvino.ai/2024/get-started/install-openvino/install-openvino-genai.html).
 
 
 ## Exporting model from 🤗 Transformers to OpenVINO
 
-🤗 and Intel have a long story of collaboration and [Optimum-Intel](https://huggingface.co/docs/optimum/en/intel/index) project is a part of this story. It is designed to optimize Transformers models for inference on Intel HW. Optimum-Intel supports OpenVINO as an inference backend and its API has wrappers for various model architectures built on top of OpenVINO inference API. All of these wrappers start from `OV` prefix, for example, `OVModelForCausalLM`. Otherwise, it is similar to the API of 🤗 Transformers library.
+HuggingFace (🤗) and Intel have a long story of collaboration and [Optimum-Intel](https://huggingface.co/docs/optimum/en/intel/index) project is a part of this story. It is designed to optimize Transformers models for inference on Intel HW. Optimum-Intel supports OpenVINO as an inference backend and its API has wrappers for various model architectures built on top of OpenVINO inference API. All of these wrappers start from `OV` prefix, for example, `OVModelForCausalLM`. Otherwise, it is similar to the API of 🤗 Transformers library.
 
 To export 🤗 Transformers model to OpenVINO IR one can use two options: `.from_pretrained()` API method of the Optimum-Intel class in a Python script or do it with Optimum the command-line interface (CLI).
 Further, we will use the recent Llama 3.1 8B decoder model as an example.
